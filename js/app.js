@@ -1,7 +1,8 @@
-import { el, toast } from './lib/ui.js';
+import { el, toast, autoLabel } from './lib/ui.js';
 import { updateSEO } from './lib/seo.js';
 import { openRadarModal, openAdvisoryModal } from './lib/monetize.js';
 import { SUPPORTED_LANGUAGES, SHELL_TRANSLATIONS, t } from './lib/i18n.js';
+import { DATA_STATUS, DATA_ROUTES, DATA_NOTICE, DATA_NOTICE_TITLE, DATA_SNAPSHOT, LEADGEN, CONTACT, SPONSOR_URL } from './config.js';
 
 /* ---------- rute & ikon ---------- */
 const ICON = {
@@ -151,6 +152,23 @@ function applyLang() {
 
   buildNav();
   buildLangModal();
+  stampFooterStatus();
+}
+
+/**
+ * Menempelkan status data pada footer supaya klaim "evaluasi independen"
+ * tidak berdiri sendiri saat angka masih ilustratif.
+ */
+function stampFooterStatus() {
+  const foot = document.querySelector('.foot-note');
+  if (!foot) return;
+  let badge = document.getElementById('dataStatusBadge');
+  if (DATA_STATUS === 'sourced') { badge?.remove(); return; }
+  if (!badge) {
+    badge = el('span.badge.badge-warn', { id: 'dataStatusBadge', style: { marginLeft: '8px' } });
+    foot.append(' ', badge);
+  }
+  badge.textContent = '⚠️ ' + t(DATA_NOTICE_TITLE.illustrative, store.lang);
 }
 
 function switchLanguage(code) {
@@ -270,6 +288,31 @@ function skeleton() {
   ]);
 }
 
+/**
+ * Menyisipkan status provenance data di atas halaman berbasis angka model.
+ * Teks & status diatur di js/config.js (DATA_STATUS).
+ */
+function injectDataNotice(root, routeId) {
+  if (!DATA_ROUTES.includes(routeId)) return;
+  const status = DATA_STATUS === 'sourced' ? 'sourced' : 'illustrative';
+  const title = t(DATA_NOTICE_TITLE[status], store.lang);
+  const body = t(DATA_NOTICE[status], store.lang);
+  const note = el('div.note' + (status === 'illustrative' ? '.note-warn' : ''), {
+    role: status === 'illustrative' ? 'alert' : null,
+    style: { marginBottom: '16px' },
+  }, [
+    el('span', { text: status === 'illustrative' ? '⚠️' : 'ℹ️', 'aria-hidden': 'true' }),
+    el('span', {}, [
+      el('strong', { text: title + ' · ' }),
+      body,
+      el('span', { text: ' (snapshot ' + DATA_SNAPSHOT + ')', style: { color: 'var(--text-mute)' } }),
+    ]),
+  ]);
+  const head = root.querySelector('.head');
+  if (head && head.nextSibling) root.insertBefore(note, head.nextSibling);
+  else root.insertBefore(note, root.firstChild);
+}
+
 async function renderRoute() {
   const my = ++renderToken;
   const { id, route } = current();
@@ -298,6 +341,8 @@ async function renderRoute() {
   const root = el('div.view');
   view.append(root);
   destroyCurrent = mod.render(root, ctx()) || null;
+  injectDataNotice(root, id);
+  autoLabel(root);   // pasangkan label tanpa "for" ke kontrolnya (aksesibilitas)
 
   updateSEO(id, store.lang);
   bar.className = 'topbar-progress done';
@@ -460,7 +505,23 @@ function wire() {
   });
 
   // Radar Signal Bar & Form
-  document.getElementById('radarBtn')?.addEventListener('click', openRadarModal);
+  // Formulir lead-gen hanya aktif kalau ada kanal nyata (lihat js/config.js).
+  if (LEADGEN.newsletter) {
+    document.getElementById('radarBtn')?.addEventListener('click', openRadarModal);
+  } else {
+    document.getElementById('signalBar')?.remove();
+    document.getElementById('radarModal')?.remove();
+  }
+  if (!LEADGEN.advisory) {
+    document.getElementById('footAdvisoryBtn')?.remove();
+    document.getElementById('advisoryModal')?.remove();
+  }
+  if (!SPONSOR_URL) {
+    document.querySelector('.foot a[href*="sponsors"]')?.remove();
+  } else {
+    const sp = document.querySelector('.foot a[href*="sponsors"]');
+    if (sp) sp.href = SPONSOR_URL;
+  }
   const rForm = document.getElementById('radarForm');
   if (rForm) {
     rForm.addEventListener('submit', (e) => {
@@ -482,6 +543,11 @@ function wire() {
       toast(store.lang === 'id' ? 'Permintaan terkirim! Tim kami akan menghubungi Anda dalam 1x24 jam.' : 'Inquiry sent! Our team will get back to you within 24 hours.');
     });
   }
+
+  // Tombol tutup modal (tanpa handler inline, supaya CSP bisa ketat)
+  document.querySelectorAll('[data-close]').forEach((b) => {
+    b.addEventListener('click', () => document.getElementById(b.dataset.close)?.close());
+  });
 
   addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openPalette(); }

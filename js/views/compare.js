@@ -362,6 +362,7 @@ export function render(root, ctx) {
             : null,
         ]),
         el('select', {
+          'aria-label': (lang === 'id' ? 'Pilih model slot ' : 'Select model slot ') + (idx + 1),
           onchange: (e) => {
             state.selectedIds[idx] = e.target.value;
             updateView();
@@ -458,7 +459,7 @@ export function render(root, ctx) {
 
     // Section 1: Skor Agregat & Nilai
     addRow(s.overall, (m) => m.overall, (v) => `${v} / 100`);
-    addRow(s.valIdx, (m) => m.valueIdx, (v) => `${v} pts/$`);
+    addRow(s.valIdx, (m) => m.valueIndex, (v) => `${v} pts/$`);
     addRow('Chatbot Arena Elo', (m) => m.elo, (v) => `${v}`);
 
     // Section 2: 8 Kategori Kemampuan

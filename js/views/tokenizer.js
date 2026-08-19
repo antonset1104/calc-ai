@@ -286,6 +286,18 @@ const S = {
   },
 };
 
+const COLOR_OF = (i) => 'tok-c' + (i % 6);
+const MAX_DRAW = 1200;   // batas token yang digambar agar DOM tetap ringan
+
+/* Contoh teks untuk tombol cepat. Kunci harus sama dengan t.sample di tiap bahasa. */
+const SAMPLES = {
+  en: 'Tokenization is the unglamorous step that decides your bill. A tokenizer splits "unbelievable" into pieces, so the model never sees the whole word at once.',
+  id: 'Tokenisasi adalah langkah sederhana yang menentukan tagihan Anda. Pemecah token membelah kata "ketidakberdayaan" menjadi beberapa potongan, sehingga model tidak pernah melihat kata utuhnya.',
+  code: 'function estimateCost(tokens, pricePerMillion) {' + String.fromCharCode(10) + '  return (tokens / 1_000_000) * pricePerMillion;' + String.fromCharCode(10) + '}',
+  mixed: 'Halo 👋 dunia! 人工智能 sangat menarik — this sentence mixes English, café naïve résumé 🌍🚀',
+  num: 'Pesanan #98217334 senilai Rp 1.250.000 dikirim pada 2026-08-18 pukul 14:37:09. {"total":1250000,"qty":3}',
+};
+
 export function render(root, ctx) {
   const t = S[ctx.lang] || S.en || S.id;
   let method = 'bpe';

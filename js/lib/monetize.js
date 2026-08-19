@@ -246,7 +246,7 @@ export function exportComparisonMarkdown(models = [], lang = 'id') {
   const h = HEADINGS[lang] || HEADINGS.en || HEADINGS.id;
 
   let md = `# ${h.title}\n\n`;
-  md += `*${h.gen}: ${dateStr} | Source: [BenchLM & LLM Lab](https://llmlab.ai/?lang=${lang})*\n\n`;
+  md += `*${h.gen}: ${dateStr} | Source: [BenchLM & LLM Lab](https://bench.vijeron.com/?lang=${lang})*\n\n`;
   md += `## ${h.summary}\n\n`;
 
   // Tabel Skor

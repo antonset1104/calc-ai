@@ -119,16 +119,46 @@ export function meter(pct, danger = false) {
 }
 
 export function slider({ label, hint, min, max, step, value, fmt = (v) => v, onInput }) {
+  const id = uid('sl');
   const out = el('span.param-val', { text: fmt(value) });
   const input = el('input', {
-    type: 'range', min, max, step, value,
+    id, type: 'range', min, max, step, value, 'aria-label': typeof label === 'string' ? label : null,
     oninput: (e) => { const v = parseFloat(e.target.value); out.textContent = fmt(v); onInput(v); },
   });
   return el('div.param', {}, [
-    el('div.param-top', {}, [el('label', {}, [label]), out]),
+    el('div.param-top', {}, [el('label', { for: id }, [label]), out]),
     input,
     hint ? el('span.param-hint', { text: hint }) : null,
   ]);
+}
+
+let uidSeq = 0;
+/** ID unik & stabil dalam satu sesi render. */
+export function uid(prefix = 'f') { return prefix + '-' + (++uidSeq); }
+
+/**
+ * Menyambungkan <label> ke kontrol tepat setelahnya bila belum punya nama
+ * yang bisa dibaca pembaca layar. Dipanggil sekali setiap view selesai render.
+ */
+export function autoLabel(root) {
+  let fixed = 0;
+  root.querySelectorAll('label').forEach((lab) => {
+    if (lab.getAttribute('for') || lab.querySelector('input, select, textarea')) return;
+    // kontrol pertama sesudah label, dalam wadah yang sama
+    let ctrl = lab.nextElementSibling;
+    if (ctrl && !/^(INPUT|SELECT|TEXTAREA)$/.test(ctrl.tagName)) {
+      ctrl = ctrl.querySelector?.('input, select, textarea') || null;
+    }
+    if (!ctrl) {
+      const box = lab.parentElement;
+      ctrl = box?.querySelector('input, select, textarea') || null;
+    }
+    if (!ctrl || ctrl.getAttribute('aria-label') || ctrl.closest('label')) return;
+    if (!ctrl.id) ctrl.id = uid('ctl');
+    lab.setAttribute('for', ctrl.id);
+    fixed++;
+  });
+  return fixed;
 }
 
 export function segmented(items, active, onPick, aria = '') {

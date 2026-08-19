@@ -292,6 +292,14 @@ const S = {
   },
 };
 
+const SYS_TOKENS = 180;   // system prompt selalu tersemat di jendela
+
+/* Kalimat contoh untuk simulasi giliran percakapan. */
+const TURN_TEXT = {
+  id: ['Bisa jelaskan ulang bagian tadi?', 'Tolong buatkan ringkasan poin utamanya.', 'Bagaimana kalau anggarannya setengah?', 'Apa risiko terbesar dari rencana itu?', 'Berikan contoh nyata yang mirip.', 'Ubah nadanya jadi lebih santai.', 'Bandingkan dengan pilihan sebelumnya.', 'Apa langkah pertama yang harus saya ambil?'],
+  en: ['Can you restate that part?', 'Give me a summary of the key points.', 'What if the budget were halved?', 'What is the biggest risk in that plan?', 'Show a real example close to this.', 'Make the tone more casual.', 'Compare it with the earlier option.', 'What is the very first step I should take?'],
+};
+
 export function render(root, ctx) {
   const t = S[ctx.lang] || S.en || S.id;
   let refId = 'novel';

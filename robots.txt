@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /dev-server.py
 
-Sitemap: https://llmlab.ai/sitemap.xml
+Sitemap: https://bench.vijeron.com/sitemap.xml

@@ -5,12 +5,12 @@
 
 import { LEADERBOARD_MODELS, BENCHMARKS } from '../data/leaderboard.js';
 
-const BASE_URL = 'https://llmlab.ai';
+const BASE_URL = 'https://bench.vijeron.com';
 
 export const SEO_DATA = {
   leaderboard: {
     title: {
-      id: 'Leaderboard Model AI & Benchmark Terverifikasi 2026',
+      id: 'Leaderboard Model AI & Metodologi Benchmark 8 Kategori',
       en: 'AI Model Leaderboard & Verified Benchmarks 2026',
       es: 'Clasificación de Modelos de IA y Benchmarks Verificados 2026',
       zh: 'AI 模型天梯榜与官方验证基准测试 2026',
@@ -362,7 +362,11 @@ export function updateSEO(routeId, lang = 'id') {
   const meta = SEO_DATA[routeId] || SEO_DATA.leaderboard;
   const titleText = `${meta.title[lang] || meta.title.en || meta.title.id} — LLM Lab & BenchLM`;
   const descText = meta.desc[lang] || meta.desc.en || meta.desc.id;
-  const canonicalUrl = `${BASE_URL}/?lang=${lang}#/${routeId}`;
+  // Canonical tanpa fragment: mesin pencari mengabaikan bagian setelah '#',
+  // jadi URL yang benar-benar dapat diindeks adalah varian bahasa.
+  const canonicalUrl = `${BASE_URL}/?lang=${lang}`;
+  // og:url tetap membawa rute supaya tautan yang dibagikan membuka tampilan yang sama.
+  const shareUrl = `${BASE_URL}/?lang=${lang}#/${routeId}`;
 
   // Title
   document.title = titleText;
@@ -406,7 +410,7 @@ export function updateSEO(routeId, lang = 'id') {
   };
   setOG('og:title', titleText);
   setOG('og:description', descText);
-  setOG('og:url', canonicalUrl);
+  setOG('og:url', shareUrl);
   setOG('og:type', 'website');
   setOG('og:site_name', 'LLM Lab & BenchLM');
   setOG('og:locale', lang === 'id' ? 'id_ID' : lang === 'en' ? 'en_US' : `${lang}_${lang.toUpperCase()}`);

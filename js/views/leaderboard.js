@@ -2,13 +2,14 @@ import { el, card, stat, meter, slider, compact, usd, nf, toast } from '../lib/u
 import { CATEGORIES, BENCHMARKS, LEADERBOARD_MODELS, USE_CASE_PROFILES, calcOverall, calcBlendedPrice, calcValueIndex } from '../data/leaderboard.js';
 import { createRadarChart } from '../lib/charts.js';
 import { exportLeaderboardCSV, exportLeaderboardJSON, getPartnerLink, openAdvisoryModal } from '../lib/monetize.js';
+import { LEADGEN } from '../config.js';
 
 export const meta = { title: { id: 'Leaderboard AI', en: 'AI Leaderboard' } };
 
 const S = {
   id: {
     eyebrow: 'BENCHLM EVALUATION STANDARD',
-    h1: 'Leaderboard Model AI & Benchmark Terverifikasi',
+    h1: 'Leaderboard Model AI & Skor Terbobot 8 Kategori',
     lead: 'Evaluasi independen model frontier dan open-weights berdasarkan 8 kategori kemampuan terbobot, harga API per 1 juta token, kecepatan streaming, dan kapasitas jendela konteks.',
     statModels: 'Model Dipantau', statCats: 'Kategori Terbobot', statFrontier: 'Model Frontier Tier-1', statOpen: 'Bobot Terbuka (Open)',
     searchPlh: 'Cari nama model, arsitektur, atau penyedia…',
@@ -318,6 +319,7 @@ export function render(root, ctx) {
   // Filter Bar
   const searchInput = el('input', {
     type: 'search',
+    'aria-label': s.searchPlh,
     placeholder: s.searchPlh,
     value: state.search,
     oninput: (e) => {
@@ -328,6 +330,7 @@ export function render(root, ctx) {
 
   const vendors = ['all', ...new Set(LEADERBOARD_MODELS.map((m) => m.vendor))];
   const vendorSelect = el('select', {
+    'aria-label': s.allVendors,
     onchange: (e) => {
       state.vendor = e.target.value;
       updateTable();
@@ -335,6 +338,7 @@ export function render(root, ctx) {
   }, vendors.map((v) => el('option', { value: v, selected: state.vendor === v }, [v === 'all' ? s.allVendors : v])));
 
   const sortSelect = el('select', {
+    'aria-label': s.sortOverall,
     onchange: (e) => {
       state.sortBy = e.target.value;
       updateTable();
@@ -643,7 +647,7 @@ export function render(root, ctx) {
       el('div.card-head', {}, [el('h3', {}, ['⚙️ ' + s.specs])]),
       el('div.grid.g-2', { style: { gap: '10px' } }, [
         stat(lang === 'id' ? 'Skor BenchLM' : 'BenchLM Score', `${m.overall}`, '/100'),
-        stat('Value Index', `${m.valueIdx}`, 'pts/$'),
+        stat('Value Index', `${m.valueIndex}`, 'pts/$'),
         stat(lang === 'id' ? 'Harga Blended' : 'Blended Cost', `$${m.blend}`, '/1M tokens'),
         stat(lang === 'id' ? 'Jendela Konteks' : 'Context Window', compact(m.ctx), 'tokens'),
         stat(lang === 'id' ? 'Batas Output' : 'Max Output', compact(m.maxOut), 'tokens'),
@@ -807,8 +811,8 @@ export function render(root, ctx) {
     catChipsWrap,
   ]);
 
-  // B2B Enterprise Advisory Callout Banner
-  const advisoryBanner = el('div.card.card-tight', {
+  // B2B Enterprise Advisory Callout Banner — hanya tampil kalau kanal kontak nyata sudah diisi (js/config.js)
+  const advisoryBanner = !LEADGEN.advisory ? null : el('div.card.card-tight', {
     style: {
       marginTop: '24px',
       background: 'linear-gradient(135deg, var(--surface-2), var(--accent-soft))',

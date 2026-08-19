@@ -27,6 +27,63 @@ Fitur lintas halaman: dua bahasa penuh (ID/EN, dapat dipaksa lewat `?lang=en`), 
 
 ---
 
+## Penerbitan ke Cloudflare Pages (bench.vijeron.com)
+
+Situs live: **https://bench-vijeron.pages.dev** (Pages project `bench-vijeron`, akun Cloudflare `setiawan.anton@gmail.com`).
+
+```bash
+python build.py                                  # menyalin situs ke dist/ tanpa berkas dev & test
+npx wrangler pages deploy dist --project-name bench-vijeron --branch main
+```
+
+`build.py` mengecualikan `dev-server.py`, `build.py`, `tools_gen_sw.py`, `test_*.mjs`, `README.md`, dan `.git/`.
+`_headers` mengirim CSP ketat (`script-src 'self'`), `nosniff`, `Referrer-Policy`, dan aturan cache
+(`/js/*` & `/css/*` 1 jam must-revalidate, `sw.js` dan `index.html` no-cache) supaya pembaruan cepat terlihat.
+
+Kalau daftar berkas berubah, regenerasi precache service worker:
+
+```bash
+python tools_gen_sw.py
+```
+
+### Sisa satu langkah manual: DNS
+
+Custom domain `bench.vijeron.com` sudah terdaftar di project Pages, tetapi record DNS-nya belum ada —
+token OAuth wrangler di mesin ini hanya punya izin `zone:read`, tidak bisa menulis DNS. Tambahkan di
+dashboard Cloudflare → zona `vijeron.com` → DNS → Add record:
+
+| Type | Name | Target | Proxy |
+| :-- | :-- | :-- | :-- |
+| CNAME | `bench` | `bench-vijeron.pages.dev` | Proxied (awan oranye) |
+
+Setelah record aktif, status domain di Pages berubah dari `pending` menjadi `active` dan sertifikat TLS
+terbit otomatis (biasanya < 5 menit). Cek status:
+
+```bash
+npx wrangler pages deployment list --project-name bench-vijeron
+```
+
+Record ini tidak menyentuh apex `vijeron.com` yang masih mengarah ke GitHub Pages.
+
+---
+
+## Status data & kanal kontak (js/config.js)
+
+Semua klaim yang butuh bukti dikumpulkan di satu berkas: `js/config.js`.
+
+- `DATA_STATUS = 'illustrative'` (bawaan) menampilkan banner peringatan di halaman Leaderboard, Bandingkan,
+  Pilih Model, dan Benchmark: angka skor/harga/Elo adalah data demonstrasi untuk memperagakan metodologi
+  pembobotan, belum diverifikasi dari laporan resmi vendor. Ubah ke `'sourced'` **hanya** setelah setiap angka
+  dicocokkan dengan sumber resmi — halaman ini menyebut nama benchmark dan vendor sungguhan.
+- `CONTACT.email` / `CONTACT.newsletterEndpoint` / `CONTACT.advisoryEndpoint` kosong ⇒ signal bar Radar Brief,
+  modal newsletter, dan tombol Enterprise Advisory otomatis disembunyikan, karena formulirnya belum terhubung
+  ke tujuan mana pun. Isi salah satunya untuk menyalakan kembali.
+- `SPONSOR_URL` kosong ⇒ tautan Sponsor & Tip Jar disembunyikan.
+- Tautan partner inference di `js/lib/monetize.js` masih memakai parameter `?ref=llmlab` yang bukan ID afiliasi
+  nyata; ganti dengan ID afiliasi Anda sebelum dipakai untuk monetisasi.
+
+---
+
 ## Menjalankan secara lokal
 
 Situs ini statis dan tanpa langkah build. Cukup layani foldernya lewat HTTP (modul ES tidak bisa dimuat dari `file://`):

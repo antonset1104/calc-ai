@@ -12,3 +12,7 @@ scratch/
 patch_*.mjs
 fix_*.mjs
 rebuild_*.mjs
+
+# Artefak build & cache wrangler
+dist/
+.wrangler/
