@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Lab & BenchLM — AI Leaderboard, Model Benchmarks & Simulator</title>
+<meta name="description" content="Leaderboard model AI independen, tolok ukur benchmark 8 kategori (Coding, Agentic, Reasoning, Vision), perbandingan model radar chart, penjelajah kurva Pareto harga-vs-kinerja, simulator token, dan glosarium AI lengkap. 100% berjalan di browser.">
+<meta name="theme-color" content="#0a0c11">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="LLM Lab & BenchLM — AI Leaderboard, Model Benchmarks & Simulator">
+<meta property="og:description" content="Bandingkan 18+ model AI terkemuka, skor benchmark 8 dimensi, simulator sampling token, dan panduan prompt engineering. Gratis & tanpa server.">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icon.svg">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#view">Lewati ke konten</a>
+
+<aside class="signal-bar" id="signalBar" aria-label="Radar signal bar">
+  <div class="signal-bar-inner">
+    <span class="signal-tag">📡 Radar</span>
+    <p class="signal-text" data-i18n="radarBrief">Ringkasan 5 perubahan AI terkonfirmasi dengan sumber asli setiap pagi.</p>
+    <button type="button" class="signal-btn" id="radarBtn" data-i18n="startBrief">Dapatkan Brief Gratis →</button>
+  </div>
+</aside>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#/leaderboard" aria-label="LLM Lab & BenchLM, ke halaman leaderboard">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#7c8cff"/><stop offset="1" stop-color="#28e0c8"/>
+        </linearGradient></defs>
+        <rect x="2" y="2" width="28" height="28" rx="9" fill="url(#bg1)" opacity=".18"/>
+        <path d="M9 22V10m0 12h6.5M23 10v12m0-12h-6.5M16 16h.01" stroke="url(#bg1)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <circle cx="16" cy="16" r="2.4" fill="url(#bg1)"/>
+      </svg>
+      <span class="brand-text">LLM<span>Lab</span></span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Navigasi utama"></nav>
+
+    <div class="topbar-actions">
+      <button class="btn btn-ghost btn-search" id="paletteBtn" type="button" aria-keyshortcuts="Control+K">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13 13l4 4M8.5 15a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span class="btn-search-label" data-i18n="search">Cari</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+      <div class="lang-picker-wrap">
+        <button class="btn btn-ghost btn-lang" id="langPickerBtn" type="button" aria-haspopup="dialog" aria-expanded="false" title="Pilih Bahasa / Select Language">
+          <span class="lang-flag" id="currentLangFlag">🇮🇩</span>
+          <span class="lang-code" id="currentLangCode">ID</span>
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4 6l4 4 4-4z"/></svg>
+        </button>
+      </div>
+      <button class="btn btn-icon" id="themeBtn" type="button" aria-label="Ganti tema">
+        <svg class="i-sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="4" fill="currentColor"/><path d="M10 1v2m0 14v2M1 10h2m14 0h2M4 4l1.5 1.5M14.5 14.5 16 16M16 4l-1.5 1.5M5.5 14.5 4 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <svg class="i-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16 12.5A7 7 0 0 1 7.5 4a7 7 0 1 0 8.5 8.5Z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="topbar-progress" id="loadbar" aria-hidden="true"></div>
+</header>
+
+<main id="view" tabindex="-1"></main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="row-between" style="gap: 12px; flex-wrap: wrap;">
+      <p class="foot-brand">LLM<span>Lab</span> &amp; BenchLM — <span data-i18n="footTag">evaluasi AI independen &amp; laboratorium interaktif: semua perhitungan berjalan di perangkat Anda.</span></p>
+      <div class="row" style="gap: 10px;">
+        <button type="button" class="btn btn-sm btn-ghost" id="footAdvisoryBtn" data-i18n="footAdvisory">🏢 Enterprise Advisory</button>
+        <a class="btn btn-sm btn-ghost" href="https://github.com/sponsors" target="_blank" rel="noopener noreferrer" style="color: var(--accent-2);">☕ Sponsor &amp; Tip Jar</a>
+      </div>
+    </div>
+    <p class="foot-note" data-i18n="footNote">BenchLM scoring, model benchmarks, sampling simulator, dan tokenizer. Tanpa akun, tanpa server, tanpa pelacakan.</p>
+  </div>
+</footer>
+
+<nav class="tabbar" id="tabbar" aria-label="Navigasi bawah"></nav>
+
+<!-- Palette Modal -->
+<dialog class="palette" id="palette" aria-label="Pencarian cepat">
+  <form class="palette-head" id="paletteForm" role="search">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13 13l4 4M8.5 15a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <input id="paletteInput" type="search" autocomplete="off" spellcheck="false" placeholder="Cari model AI, tolok ukur, halaman, atau istilah…" aria-label="Kata kunci">
+    <kbd>Esc</kbd>
+  </form>
+  <ul class="palette-list" id="paletteList" role="listbox" aria-label="Hasil"></ul>
+</dialog>
+
+<!-- Radar Brief Newsletter Modal -->
+<dialog class="palette" id="radarModal" aria-label="Langganan Radar Morning Brief">
+  <div class="palette-head" style="justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="signal-tag">📡 Radar Brief</span>
+      <strong style="font-size: 1.05rem;" data-i18n="radarModalTitle">Ringkasan Pagi AI Terverifikasi</strong>
+    </div>
+    <button type="button" class="btn btn-icon btn-ghost" onclick="document.getElementById('radarModal').close()">✕</button>
+  </div>
+  <form id="radarForm" style="padding: 20px; display: grid; gap: 14px;">
+    <p style="font-size: 0.88rem; color: var(--text-dim);" data-i18n="radarModalDesc">Dapatkan maksimal 5 perubahan &amp; rilis model AI terpenting, diverifikasi dengan tautan sumber resmi langsung ke inbox Anda setiap pagi. 100% gratis, tanpa spam.</p>
+    <div class="param">
+      <label for="radarEmail" data-i18n="emailLabel">Alamat Email Kerja / Pribadi</label>
+      <input type="email" id="radarEmail" required placeholder="nama@perusahaan.com" style="width: 100%;">
+    </div>
+    <div class="row-between" style="margin-top: 6px;">
+      <span style="font-size: 0.76rem; color: var(--text-mute);">✓ Unsubscribe kapan saja dengan 1 klik</span>
+      <button type="submit" class="btn btn-primary" data-i18n="subscribeBtn">Mulai Berlangganan Gratis</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Enterprise Advisory Modal -->
+<dialog class="palette" id="advisoryModal" aria-label="Enterprise LLM Advisory">
+  <div class="palette-head" style="justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="badge badge-accent">🏢 Enterprise</span>
+      <strong style="font-size: 1.05rem;" data-i18n="advisoryTitle">Konsultasi Pemilihan &amp; Evaluasi LLM</strong>
+    </div>
+    <button type="button" class="btn btn-icon btn-ghost" onclick="document.getElementById('advisoryModal').close()">✕</button>
+  </div>
+  <form id="advisoryForm" style="padding: 20px; display: grid; gap: 14px;">
+    <p style="font-size: 0.88rem; color: var(--text-dim);" data-i18n="advisoryDesc">Diskusikan kebutuhan arsitektur inferensi, seleksi model on-premise vs cloud API, optimasi biaya token, atau pengujian benchmark khusus bersama tim ahli kami.</p>
+    <div class="grid g-2" style="gap: 10px;">
+      <div class="param">
+        <label for="advName" data-i18n="nameLabel">Nama Lengkap</label>
+        <input type="text" id="advName" required placeholder="Nama Anda">
+      </div>
+      <div class="param">
+        <label for="advEmail" data-i18n="emailLabel">Email Perusahaan</label>
+        <input type="email" id="advEmail" required placeholder="nama@perusahaan.com">
+      </div>
+    </div>
+    <div class="param">
+      <label for="advMsg" data-i18n="msgLabel">Kebutuhan / Proyek Anda</label>
+      <textarea id="advMsg" rows="3" placeholder="Ceritakan beban kerja AI, perkiraan volume token, atau tantangan evaluasi model Anda…"></textarea>
+    </div>
+    <div class="row-between" style="margin-top: 6px;">
+      <span style="font-size: 0.76rem; color: var(--text-mute);">Respon dalam 1x24 jam kerja</span>
+      <button type="submit" class="btn btn-primary" data-i18n="sendInquiry">Kirim Permintaan Konsultasi</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- World Language Picker Modal -->
+<dialog class="palette lang-modal" id="langModal" aria-label="Pilih Bahasa / Select Language">
+  <div class="palette-head" style="justify-content: space-between; border-bottom: 1px solid var(--line); padding: 14px 18px;">
+    <strong style="display: flex; align-items: center; gap: 8px; font-size: 1rem;">
+      <span style="font-size: 1.2rem;">🌐</span>
+      <span data-i18n="selectLang">Pilih Bahasa Dunia</span>
+    </strong>
+    <button type="button" class="btn btn-sm btn-ghost" id="closeLangModal" aria-label="Close">✕</button>
+  </div>
+  <div class="lang-grid" id="langGrid"></div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

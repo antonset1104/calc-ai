@@ -1,0 +1,14 @@
+# OS & IDE
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+.vscode/
+.idea/
+
+# Logs & scratch
+*.log
+scratch/
+patch_*.mjs
+fix_*.mjs
+rebuild_*.mjs
