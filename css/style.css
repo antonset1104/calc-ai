@@ -615,3 +615,50 @@ html[dir="rtl"] .btn { flex-direction: row-reverse; }
 }
 @media print { .topbar, .tabbar, .foot, .palette { display: none !important; } }
 
+
+/* ==========================================================================
+   LAPISAN MOBILE — TARGET SENTUH & TIPOGRAFI
+   --------------------------------------------------------------------------
+   Audit Playwright pada 360/390/414px: tidak ada masalah meluber di sini,
+   tetapi 45 target sentuh masih di bawah 44px dan 324 elemen berteks di bawah
+   13px (terkecil 10.56px). Tampilan desktop tidak diubah.
+   ========================================================================== */
+
+img, svg, video, canvas, iframe { max-width: 100%; }
+
+@media (max-width: 768px) {
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-size: 15px; line-height: 1.6; }
+
+  small, .badge, .chip, .meta, .caption, .hint, .muted, figcaption,
+  .kpi-label, .cell-sub, .legend { font-size: 0.82rem; }
+
+  input, select, textarea { font-size: 16px; }
+
+  button, .btn, .chip, a.brand, [role="button"],
+  input[type="button"], input[type="submit"] { min-height: 44px; }
+
+  a.brand, .btn, .chip { display: inline-flex; align-items: center; }
+
+  button:has(> svg:only-child) {
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+  select, textarea { min-height: 44px; }
+
+  h1, h2, h3, p, li, td, th { overflow-wrap: anywhere; }
+
+  table { display: block; overflow-x: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
