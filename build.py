@@ -1,7 +1,9 @@
 import os, shutil, sys
 SRC = os.getcwd()
 DIST = os.path.join(SRC, 'dist')
-SKIP_DIRS = {'.git', 'dist', 'node_modules', '__pycache__', '.wrangler'}
+# .github berisi alur kerja dan skrip CI; tanpa dikecualikan, seluruhnya
+# ikut tersalin ke dist/ dan terbit di bench.vijeron.com.
+SKIP_DIRS = {'.git', '.github', 'dist', 'node_modules', '__pycache__', '.wrangler'}
 SKIP_FILES = {'dev-server.py', 'build.py', 'tools_gen_sw.py', 'tools_gen_sitemap.py', 'README.md', '.gitignore',
               'test_sit.mjs', 'test_i18n_standalone.mjs'}
 if os.path.isdir(DIST):

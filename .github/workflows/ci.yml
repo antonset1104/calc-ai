@@ -1,0 +1,44 @@
+name: CI
+
+# Repo ini disajikan Cloudflare Pages apa adanya dari isi repositori, tanpa
+# langkah build yang bisa menggagalkan penggantian nama berkas. Karena itu
+# rujukan aset dan daftar prasinggah service worker harus diperiksa terpisah:
+# keduanya rusak tanpa suara.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Rujukan aset, service worker, sintaks JavaScript
+        run: node .github/ci/check-static.mjs
+
+      - name: Build
+        run: python3 build.py
+
+      - name: Audit tampilan ponsel
+        run: |
+          npm install -g playwright@1.56.0
+          npx playwright install --with-deps chromium
+          PLAYWRIGHT_MODULE="$(npm root -g)/playwright/index.js" \
+            node .github/ci/audit-mobile.mjs
