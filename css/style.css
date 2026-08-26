@@ -662,3 +662,88 @@ img, svg, video, canvas, iframe { max-width: 100%; }
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   LAPISAN KETERBACAAN PONSEL
+   Audit pada 360/390/414px menemukan 247 elemen teks di bawah
+   12px — terkecil 10,56px — dan 30 kotak centang perbandingan
+   berukuran bawaan peramban 13x13px. Penyebabnya satu skala
+   tipografi desktop yang ikut terpakai apa adanya di ponsel:
+   .cap-micro-item saja 120 elemen, lalu .vendor-tag, .score-max,
+   .price-sub, dan .speed-ttft masing-masing 30 elemen.
+   Perbaikannya menaikkan pencilan itu ke langkah terkecil yang
+   memang sudah dipakai desain ini (0,8rem = 12,8px), bukan
+   memperkenalkan ukuran baru.
+   ============================================================ */
+@media (max-width: 768px) {
+  .cap-micro-item,
+  .vendor-tag,
+  .score-max,
+  .price-sub,
+  .speed-ttft,
+  .foot-note,
+  table.tbl thead th,
+  .tabbar a span,
+  .btn kbd,
+  .btn-ghost kbd,
+  .btn-search kbd,
+  .palette-head kbd,
+  kbd {
+    font-size: 0.8rem;
+  }
+
+  .btn,
+  .btn-ghost,
+  .btn-icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Kotak centang perbandingan model memakai ukuran bawaan peramban,
+     13x13px — terlalu kecil untuk jempol, dan padding tidak berlaku
+     pada elemen tergantikan (replaced element). Dengan appearance:none
+     kotaknya digambar sendiri: area sentuh 44px, kotak terlihat 22px. */
+  .tbl input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 44px;
+    height: 44px;
+    display: inline-grid;
+    place-content: center;
+    background: none;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .tbl input[type="checkbox"]::before {
+    content: "";
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border, rgba(255, 255, 255, 0.18));
+    border-radius: 6px;
+    background: var(--surface-2);
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .tbl input[type="checkbox"]:checked::before {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 3px var(--bg);
+  }
+
+  .tbl input[type="checkbox"]:focus-visible::before {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* iOS Safari melakukan zoom otomatis pada kolom isian di bawah 16px. */
+  input[type="text"],
+  input[type="search"],
+  input[type="number"],
+  input[type="email"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
