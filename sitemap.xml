@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Routing memakai hash (#/leaderboard), sehingga seluruh tampilan berada pada satu dokumen.
-     Yang dapat diindeks adalah varian bahasa (?lang=xx) — itulah yang didaftarkan di sini. -->
+<!-- LLM Lab & BenchLM XML Sitemap (Multi-language SEO with hreflang alternate links) -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://bench.vijeron.com/</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -22,7 +21,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=id</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -40,7 +39,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=en</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -58,7 +57,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=es</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -76,7 +75,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=zh</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -94,7 +93,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=ja</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -112,7 +111,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=fr</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -130,7 +129,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=de</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -148,7 +147,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=ar</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -166,7 +165,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=pt</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -184,7 +183,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=ru</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>
@@ -202,7 +201,7 @@
   </url>
   <url>
     <loc>https://bench.vijeron.com/?lang=ko</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://bench.vijeron.com/?lang=id"/>

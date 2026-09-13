@@ -27,6 +27,17 @@ Fitur lintas halaman: dua bahasa penuh (ID/EN, dapat dipaksa lewat `?lang=en`), 
 
 ---
 
+## 📚 Dokumentasi Proyek
+
+Dokumentasi lengkap dan mendalam tersedia di folder [`docs/`](./docs/):
+
+- **[Dokumentasi Teknis (Technical Documentation)](./docs/TECHNICAL_DOCUMENTATION.md)**: Arsitektur Zero-Backend, Engine Matematika Sampling, Formula Pembobotan BenchLM, Tokenizer Multi-Engine, SVG Charts Generator, SEO & Schema.org, serta Pipeline Deployment.
+- **[Spesifikasi Fungsional (Functional Documentation)](./docs/FUNCTIONAL_DOCUMENTATION.md)**: Rincian spesifikasi dan interaksi untuk seluruh 9 modul (Leaderboard, Compare, Selector, Benchmarks, Simulator, Tokenizer, Context, Prompting, Glossary) dan fitur shell global.
+- **[Panduan Pengguna (User Guide)](./docs/USER_GUIDE.md)**: Tutorial langkah demi langkah penggunaan setiap fitur, skenario eksperimen, panduan instalasi PWA, pintasan keyboard, dan FAQ.
+- **[XML Sitemap Standar SEO](./sitemap.xml)**: Peta situs terindeks dengan 11 varian bahasa (*hreflang alternate* + *x-default*).
+
+---
+
 ## Penerbitan ke Cloudflare Pages (bench.vijeron.com)
 
 Situs live: **https://bench-vijeron.pages.dev** (Pages project `bench-vijeron`, akun Cloudflare `setiawan.anton@gmail.com`).
