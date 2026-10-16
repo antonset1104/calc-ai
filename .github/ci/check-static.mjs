@@ -99,8 +99,15 @@ if (fs.existsSync(swPath)) {
   const constString = (name) =>
     new RegExp(`const\\s+${name}\\s*=\\s*['"][^'"]+['"]`).test(sw);
 
+  const unregistersOldWorker = sw.includes('self.registration.unregister()');
   const cacheIdent = /caches\.open\(\s*([A-Za-z_$][\w$]*)\s*\)/.exec(sw)?.[1];
-  if (!cacheIdent) {
+  if (unregistersOldWorker) {
+    if (!sw.includes('caches.keys()') || !sw.includes('caches.delete(') || sw.includes("addEventListener('fetch'")) {
+      problems.push('sw.js: pembersihan cache lama atau pelepasan fetch handler tidak lengkap');
+    } else {
+      notes.push('sw.js: cache lama dibersihkan dan service worker dinonaktifkan');
+    }
+  } else if (!cacheIdent) {
     problems.push('sw.js: tidak ada caches.open(...) dengan konstanta — versi cache tidak bisa ditelusuri');
   } else if (!constString(cacheIdent)) {
     problems.push(`sw.js: caches.open(${cacheIdent}) tetapi const ${cacheIdent} tidak ditemukan sebagai teks`);
