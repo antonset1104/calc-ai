@@ -4,7 +4,7 @@
    Aset statis: stale-while-revalidate.
    ============================================================ */
 
-const VERSION = 'llmlab-v3';
+const VERSION = 'llmlab-v4';
 const CORE = [
   './',
   './index.html',
@@ -62,6 +62,17 @@ self.addEventListener('fetch', (e) => {
         })
         .catch(() => caches.match('./index.html').then((r) => r || Response.error())),
     );
+    return;
+  }
+
+  // Editorial corrections must reach returning visitors on the next load.
+  if (request.destination === 'script' || request.destination === 'style') {
+    e.respondWith(fetch(request)
+      .then((res) => {
+        if (res.ok) caches.open(VERSION).then((c) => c.put(request, res.clone()));
+        return res;
+      })
+      .catch(() => caches.match(request).then((hit) => hit || Response.error())));
     return;
   }
 
