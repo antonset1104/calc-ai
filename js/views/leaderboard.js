@@ -2,7 +2,16 @@ import { el, card, stat, meter, slider, compact, usd, nf, toast } from '../lib/u
 import { CATEGORIES, BENCHMARKS, LEADERBOARD_MODELS, USE_CASE_PROFILES, calcOverall, calcBlendedPrice, calcValueIndex } from '../data/leaderboard.js';
 import { createRadarChart } from '../lib/charts.js';
 import { exportLeaderboardCSV, exportLeaderboardJSON, getPartnerLink, openAdvisoryModal } from '../lib/monetize.js';
-import { LEADGEN } from '../config.js';
+import { DATA_NOTICE, DATA_STATUS, LEADGEN } from '../config.js';
+
+const ILLUSTRATIVE_TITLE = {
+  id: 'Simulator Skor Model AI — Data Contoh', en: 'AI Model Scoring Simulator — Example Data',
+  es: 'Simulador de puntuación IA — Datos de ejemplo', zh: 'AI 模型评分模拟器 — 示例数据',
+  ja: 'AIモデル採点シミュレーター — サンプルデータ', fr: 'Simulateur de scores IA — Données illustratives',
+  de: 'KI-Bewertungssimulator — Beispieldaten', ar: 'محاكي تقييم نماذج الذكاء الاصطناعي — بيانات توضيحية',
+  pt: 'Simulador de pontuação IA — Dados ilustrativos', ru: 'Симулятор оценки моделей ИИ — примерные данные',
+  ko: 'AI 모델 점수 시뮬레이터 — 예시 데이터',
+};
 
 export const meta = { title: { id: 'Leaderboard AI', en: 'AI Leaderboard' } };
 
@@ -10,7 +19,7 @@ const S = {
   id: {
     eyebrow: 'BENCHLM EVALUATION STANDARD',
     h1: 'Leaderboard Model AI & Skor Terbobot 8 Kategori',
-    lead: 'Evaluasi independen model frontier dan open-weights berdasarkan 8 kategori kemampuan terbobot, harga API per 1 juta token, kecepatan streaming, dan kapasitas jendela konteks.',
+    lead: 'Simulasi pembobotan 8 kategori dengan angka contoh untuk model frontier dan bobot terbuka. Skor, harga, kecepatan, dan kapasitas yang ditampilkan belum diverifikasi.',
     statModels: 'Model Dipantau', statCats: 'Kategori Terbobot', statFrontier: 'Model Frontier Tier-1', statOpen: 'Bobot Terbuka (Open)',
     searchPlh: 'Cari nama model, arsitektur, atau penyedia…',
     catAll: 'Semua Kategori',
@@ -64,8 +73,8 @@ const S = {
   },
   en: {
     eyebrow: 'BENCHLM EVALUATION STANDARD',
-    h1: 'AI Model Leaderboard & Verified Benchmarks',
-    lead: 'Independent evaluation of frontier and open-weights models across 8 weighted capability categories, API pricing per million tokens, throughput speed, and context window limits.',
+    h1: 'AI Model Scoring Simulator — Example Data',
+    lead: 'Explore an eight-category weighting method using illustrative model figures. Scores, prices, speeds, and limits are unverified examples.',
     statModels: 'Tracked Models', statCats: 'Weighted Categories', statFrontier: 'Frontier Tier-1', statOpen: 'Open Weights',
     searchPlh: 'Search model name, architecture, or provider…',
     catAll: 'All Categories',
@@ -306,12 +315,12 @@ export function render(root, ctx) {
   // Container Elemen
   const heroEl = el('div.hero', {}, [
     el('div.eyebrow', { text: s.eyebrow }),
-    el('h1', { text: s.h1 }),
-    el('p', { text: s.lead }),
+    el('h1', { text: DATA_STATUS === 'illustrative' ? ILLUSTRATIVE_TITLE[lang] || ILLUSTRATIVE_TITLE.en : s.h1 }),
+    el('p', { text: DATA_STATUS === 'illustrative' ? DATA_NOTICE.illustrative[lang] || DATA_NOTICE.illustrative.en : s.lead }),
     el('div.hero-metrics', {}, [
       el('span.badge.badge-accent', { text: `✦ ${LEADERBOARD_MODELS.length} ${s.statModels}` }),
       el('span.badge.badge-ok', { text: `⚡ 8 ${s.statCats}` }),
-      el('span.badge', { text: `🏆 ${LEADERBOARD_MODELS.filter((m) => m.blend >= 2.0 && m.overall >= 90).length} ${s.statFrontier}` }),
+      DATA_STATUS === 'sourced' ? el('span.badge', { text: `🏆 ${LEADERBOARD_MODELS.filter((m) => m.blend >= 2.0 && m.overall >= 90).length} ${s.statFrontier}` }) : null,
       el('span.badge', { text: `🔓 ${LEADERBOARD_MODELS.filter((m) => m.license === 'Open Weights').length} ${s.statOpen}` }),
     ]),
   ]);
@@ -472,9 +481,9 @@ export function render(root, ctx) {
 
         // Rank (#1 - #3 gold/silver/bronze badge)
         let rankBadge = el('span.rank-num', { text: `#${idx + 1}` });
-        if (idx === 0) rankBadge = el('span.badge.badge-warn', { text: '🥇 #1' });
-        else if (idx === 1) rankBadge = el('span.badge', { text: '🥈 #2' });
-        else if (idx === 2) rankBadge = el('span.badge', { text: '🥉 #3' });
+        if (DATA_STATUS === 'sourced' && idx === 0) rankBadge = el('span.badge.badge-warn', { text: '🥇 #1' });
+        else if (DATA_STATUS === 'sourced' && idx === 1) rankBadge = el('span.badge', { text: '🥈 #2' });
+        else if (DATA_STATUS === 'sourced' && idx === 2) rankBadge = el('span.badge', { text: '🥉 #3' });
 
         // Model name + badges
         const modelCell = el('td', {}, [
@@ -485,9 +494,9 @@ export function render(root, ctx) {
               m.license === 'Open Weights'
                 ? el('span.badge.badge-ok.badge-xs', { text: 'Open' })
                 : el('span.badge.badge-xs', { text: 'API' }),
-              m.status === 'Supported'
-                ? el('span.badge.badge-accent.badge-xs', { text: '✓ Verified' })
-                : el('span.badge.badge-warn.badge-xs', { text: '⚡ Est' }),
+              DATA_STATUS === 'illustrative'
+                ? el('span.badge.badge-warn.badge-xs', { text: ctx.lang === 'id' ? 'Contoh' : 'Demo' })
+                : el('span.badge.badge-accent.badge-xs', { text: m.status }),
             ]),
           ]),
         ]);

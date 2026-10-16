@@ -4,6 +4,7 @@
 
 import { el, card, stat, meter, compact, nf } from '../lib/ui.js';
 import { CATEGORIES, BENCHMARKS, LEADERBOARD_MODELS } from '../data/leaderboard.js';
+import { DATA_NOTICE, DATA_NOTICE_TITLE, DATA_STATUS } from '../config.js';
 
 export const meta = { title: { id: 'Benchmark AI', en: 'AI Benchmarks' } };
 
@@ -253,8 +254,8 @@ export function render(root, ctx) {
     el('div.card-head', {}, [el('h2', {}, ['🛡️ ' + s.standardsTitle])]),
     el('div.grid.g-3', {}, [
       el('div.card.card-tight', { style: { background: 'var(--surface-2)' } }, [
-        el('h3', { text: s.std1Title, style: { fontSize: '0.95rem', marginBottom: '8px' } }),
-        el('p', { text: s.std1Body, style: { fontSize: '0.84rem', color: 'var(--text-dim)' } }),
+        el('h3', { text: DATA_STATUS === 'illustrative' ? DATA_NOTICE_TITLE.illustrative[lang] || DATA_NOTICE_TITLE.illustrative.en : s.std1Title, style: { fontSize: '0.95rem', marginBottom: '8px' } }),
+        el('p', { text: DATA_STATUS === 'illustrative' ? DATA_NOTICE.illustrative[lang] || DATA_NOTICE.illustrative.en : s.std1Body, style: { fontSize: '0.84rem', color: 'var(--text-dim)' } }),
       ]),
       el('div.card.card-tight', { style: { background: 'var(--surface-2)' } }, [
         el('h3', { text: s.std2Title, style: { fontSize: '0.95rem', marginBottom: '8px' } }),
@@ -299,8 +300,8 @@ export function render(root, ctx) {
         el('span', {}, [el('strong', { text: `${s.metric}: ` }), b.metric]),
       ]),
       el('div', { style: { marginTop: '10px' } }, [
-        el('span', { text: s.topModels, style: { fontSize: '0.78rem', fontWeight: '600', color: 'var(--text-mute)' } }),
-        leadersList,
+        DATA_STATUS === 'sourced' ? el('span', { text: s.topModels, style: { fontSize: '0.78rem', fontWeight: '600', color: 'var(--text-mute)' } }) : null,
+        DATA_STATUS === 'sourced' ? leadersList : null,
       ]),
     ]);
     benchGrid.appendChild(bCard);

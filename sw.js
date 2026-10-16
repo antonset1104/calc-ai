@@ -4,7 +4,7 @@
    Aset statis: stale-while-revalidate.
    ============================================================ */
 
-const VERSION = 'llmlab-v2';
+const VERSION = 'llmlab-v3';
 const CORE = [
   './',
   './index.html',

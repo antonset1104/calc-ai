@@ -9,6 +9,7 @@
 
 import { toast } from './ui.js';
 import { LEADERBOARD_MODELS, CATEGORIES } from '../data/leaderboard.js';
+import { DATA_STATUS } from '../config.js';
 
 /**
  * Tautan Partner Inference & Hosting (Referral B2B)
@@ -166,7 +167,7 @@ export function exportLeaderboardCSV(models = LEADERBOARD_MODELS, lang = 'id') {
     `"${m.vendor}"`,
     `"${m.architecture}"`,
     m.license,
-    m.status,
+    DATA_STATUS === 'illustrative' ? 'ILLUSTRATIVE_UNVERIFIED' : m.status,
     m.overall,
     m.scores.agentic,
     m.scores.coding,
@@ -195,7 +196,7 @@ export function exportLeaderboardCSV(models = LEADERBOARD_MODELS, lang = 'id') {
 
   const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
   const dateStr = new Date().toISOString().slice(0, 10);
-  downloadFile(`benchlm_ai_leaderboard_${dateStr}.csv`, csvContent, 'text/csv');
+  downloadFile(`benchlm_ai_${DATA_STATUS === 'illustrative' ? 'unverified_examples' : 'leaderboard'}_${dateStr}.csv`, csvContent, 'text/csv');
   const n = NOTIFY[lang] || NOTIFY.en || NOTIFY.id;
   toast(n.csv);
 }
@@ -207,6 +208,8 @@ export function exportLeaderboardJSON(models = LEADERBOARD_MODELS, lang = 'id') 
   const jsonContent = JSON.stringify({
     metadata: {
       platform: 'BenchLM & LLM Lab',
+      dataStatus: DATA_STATUS,
+      dataNotice: 'Figures are illustrative and unverified; not actual benchmark results or current prices.',
       exportedAt: new Date().toISOString(),
       modelsTracked: models.length,
       methodology: '8-category weighted scoring (Agentic 22%, Coding 20%, Reasoning 17%, Knowledge 12%, Vision 12%, Multilingual 7%, Instruction 5%, Math 5%)',
@@ -215,7 +218,7 @@ export function exportLeaderboardJSON(models = LEADERBOARD_MODELS, lang = 'id') 
   }, null, 2);
 
   const dateStr = new Date().toISOString().slice(0, 10);
-  downloadFile(`benchlm_ai_leaderboard_${dateStr}.json`, jsonContent, 'application/json');
+  downloadFile(`benchlm_ai_${DATA_STATUS === 'illustrative' ? 'unverified_examples' : 'leaderboard'}_${dateStr}.json`, jsonContent, 'application/json');
   const n = NOTIFY[lang] || NOTIFY.en || NOTIFY.id;
   toast(n.json);
 }

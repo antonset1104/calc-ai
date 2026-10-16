@@ -3,28 +3,29 @@
    Mendukung 11 Bahasa Global: ID, EN, ES, ZH, JA, FR, DE, AR, PT, RU, KO
    ============================================================ */
 
-import { LEADERBOARD_MODELS, BENCHMARKS } from '../data/leaderboard.js';
+import { BENCHMARKS } from '../data/leaderboard.js';
+import { DATA_NOTICE, DATA_STATUS } from '../config.js';
 
 const BASE_URL = 'https://bench.vijeron.com';
 
 export const SEO_DATA = {
   leaderboard: {
     title: {
-      id: 'Leaderboard Model AI & Metodologi Benchmark 8 Kategori',
-      en: 'AI Model Leaderboard & Verified Benchmarks 2026',
-      es: 'Clasificación de Modelos de IA y Benchmarks Verificados 2026',
-      zh: 'AI 模型天梯榜与官方验证基准测试 2026',
-      ja: 'AIモデルリーダーボード＆検証済みベンチマーク 2026',
-      fr: 'Classement des Modèles IA et Benchmarks Vérifiés 2026',
-      de: 'KI-Modell-Rangliste & Verifizierte Benchmarks 2026',
-      ar: 'لوحة صدارة نماذج الذكاء الاصطناعي والمقاييس الموثقة 2026',
-      pt: 'Classificação de Modelos de IA e Benchmarks Verificados 2026',
-      ru: 'Рейтинг моделей ИИ и проверенные бенчмарки 2026',
-      ko: 'AI 모델 리더보드 & 검증된 벤치마크 2026',
+      id: 'Simulator Pembobotan Skor Model AI — Data Contoh',
+      en: 'AI Model Scoring Simulator — Illustrative Data',
+      es: 'Simulador de Puntuación de Modelos IA — Datos de Ejemplo',
+      zh: 'AI 模型评分模拟器 — 示例数据',
+      ja: 'AIモデル採点シミュレーター — サンプルデータ',
+      fr: 'Simulateur de Scores de Modèles IA — Données Illustratives',
+      de: 'KI-Modell-Bewertungssimulator — Beispieldaten',
+      ar: 'محاكي تقييم نماذج الذكاء الاصطناعي — بيانات توضيحية',
+      pt: 'Simulador de Pontuação de Modelos IA — Dados Ilustrativos',
+      ru: 'Симулятор оценки моделей ИИ — примерные данные',
+      ko: 'AI 모델 점수 시뮬레이터 — 예시 데이터',
     },
     desc: {
-      id: 'Peringkat independen 30+ model AI dengan skor terbobot 8 kategori, harga token API, kecepatan streaming, dan context window.',
-      en: 'Independent ranking of 30+ AI models across 8 weighted categories, token pricing, throughput speed, and context limits.',
+      id: 'Pelajari pembobotan 8 kategori dengan skor, harga, dan kecepatan contoh yang belum diverifikasi. Bukan peringkat aktual atau dasar pembelian.',
+      en: 'Explore eight-category AI model scoring with unverified example scores, prices, and speeds. Not a current ranking or purchasing guide.',
       es: 'Clasificación independiente de más de 30 modelos de IA en 8 categorías ponderadas, precios de tokens, velocidad y límites de contexto.',
       zh: '独立评估 30+ 款前沿 AI 模型，覆盖 8 项加权维度得分、API Token 价格、生成速度及上下文窗口。',
       ja: '8つの加重カテゴリ、トークン価格、スループット速度、コンテキスト制限にわたる30以上のAIモデルの独立ランキング。',
@@ -38,25 +39,12 @@ export const SEO_DATA = {
     keywords: 'AI leaderboard, LLM benchmarks, Claude 3.7 Sonnet, DeepSeek R1, GPT-5, Qwen 2.5 Coder, Llama 3.3, Phi-4, token pricing, SWE-bench, MMLU-Pro, GPQA Diamond',
     schema: (lang) => ({
       '@context': 'https://schema.org',
-      '@type': 'Dataset',
-      name: `BenchLM AI Model Benchmark Dataset (${lang.toUpperCase()})`,
-      description: 'Comprehensive benchmark scores, API pricing, throughput, and context limits for frontier and open-weights LLMs.',
+      '@type': 'WebApplication',
+      name: `BenchLM Illustrative AI Scoring Simulator (${lang.toUpperCase()})`,
+      description: 'Interactive weighting simulator with illustrative, unverified model figures. Not a current benchmark dataset.',
       url: `${BASE_URL}/?lang=${lang}#/leaderboard`,
+      applicationCategory: 'EducationalApplication',
       creator: { '@type': 'Organization', name: 'LLM Lab & BenchLM', url: BASE_URL },
-      variableMeasured: [
-        'BenchLM Overall Score (0-100)',
-        'Coding (LiveCodeBench, SWE-bench)',
-        'Reasoning (GPQA Diamond, MATH-500)',
-        'Token Pricing per Million',
-        'Output Speed (tokens/sec)',
-        'Context Window Size',
-      ],
-      itemListElement: LEADERBOARD_MODELS.slice(0, 10).map((m, idx) => ({
-        '@type': 'ListItem',
-        position: idx + 1,
-        name: m.name,
-        description: `${m.vendor} - BenchLM: ${m.overall}/100, $${m.blend}/1M tokens`,
-      })),
     }),
   },
   compare: {
@@ -361,7 +349,9 @@ export const SEO_DATA = {
 export function updateSEO(routeId, lang = 'id') {
   const meta = SEO_DATA[routeId] || SEO_DATA.leaderboard;
   const titleText = `${meta.title[lang] || meta.title.en || meta.title.id} — LLM Lab & BenchLM`;
-  const descText = meta.desc[lang] || meta.desc.en || meta.desc.id;
+  const descText = routeId === 'leaderboard' && DATA_STATUS === 'illustrative'
+    ? DATA_NOTICE.illustrative[lang] || DATA_NOTICE.illustrative.en
+    : meta.desc[lang] || meta.desc.en || meta.desc.id;
   // Canonical tanpa fragment: mesin pencari mengabaikan bagian setelah '#',
   // jadi URL yang benar-benar dapat diindeks adalah varian bahasa.
   const canonicalUrl = `${BASE_URL}/?lang=${lang}`;
